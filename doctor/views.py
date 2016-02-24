@@ -68,12 +68,15 @@ class ScheduleAppointmentViews(FormView):
         """
         Upon form Validation check the availability and return the doctor list
         """
-        doctors = self._get_doctor_list(form)
-
-        if doctors:
-            template_name = 'available_doctor_list.html'
+        try:
+            doctors = self._get_doctor_list(form)
+            if doctors:
+                template_name = 'available_doctor_list.html'
             context_data = {'doctors': doctors}
             return render(self.request, template_name, context_data)
+        except Exception as exp:  # noqa
+            # Log the exception
+            pass
 
         # Return error message
         self.form_invalid(form)
